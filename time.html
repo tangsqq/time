@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>🕒</text></svg>">
+    <title>Time</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: whitesmoke;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: black;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 400px;
+        }
+        h2 { color: #4a5568; margin-bottom: 1.5rem; }
+        .time-box {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: black;
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 70%;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: lightblue; }
+        .greeting { font-size: 1.1rem; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Welcome</h2>
+        
+        <p class="greeting">Hi! <strong id="display-name">Visitor</strong>！</p>
+        
+        <div class="time-box" id="clock">00:00:00</div>
+
+        <div class="input-group">
+            <input type="text" id="user-input" placeholder="Insert your name">
+            <button onclick="updateName()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. 更新时钟的函数
+        function updateClock() {
+            const now = new Date();
+            // 使用特定时区的显示方式（等同于你之前的 KL 时区）
+            const timeString = now.toLocaleTimeString('en-GB', { 
+                hour12: false, 
+                timeZone: 'Asia/Kuala_Lumpur' 
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        // 2. 更新名字的函数
+        function updateName() {
+            const input = document.getElementById('user-input');
+            const display = document.getElementById('display-name');
+            if (input.value.trim() !== "") {
+                display.textContent = input.value;
+                // 可选：存入浏览器本地存储，这样刷新页面名字也不会丢
+                localStorage.setItem('savedName', input.value);
+                input.value = ""; // 清空输入框
+            }
+        }
+
+        // 3. 页面加载时检查是否有存过的名字
+        window.onload = function() {
+            const saved = localStorage.getItem('savedName');
+            if (saved) {
+                document.getElementById('display-name').textContent = saved;
+            }
+            updateClock(); // 立即显示一次时间
+        };
+
+        // 每秒刷新一次
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
